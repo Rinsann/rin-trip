@@ -28,6 +28,7 @@ const props = defineProps({
     default: () => ({}),
   },
 });
+
 </script>
 
 <style lang="less" scoped>
