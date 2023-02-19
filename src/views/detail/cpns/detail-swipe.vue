@@ -7,11 +7,22 @@
         </van-swipe-item>
       </template>
 
-      <template #indicator="props">
+      <template #indicator="{ active, total }">
         <!-- <div class="indicator">{{ props.active }}/{{ swipeData.length }}</div> -->
         <div class="indicator">
           <template v-for="(value, key, index) in swipeGroup" :key="key">
-            <span class="item">{{ getName(value[index].title) }}</span>
+            <span
+              class="item"
+              :class="{ active: swipeData[active]?.enumPictureCategory == key }"
+            >
+              <span class="text"> {{ getName(value[0].title) }}</span>
+              <span
+                class="count"
+                v-if="swipeData[active]?.enumPictureCategory == key"
+              >
+                {{ getCategoryIndex(swipeData[active]) }}/{{ value.length }}
+              </span>
+            </span>
           </template>
         </div>
       </template>
@@ -44,6 +55,11 @@ const getName = (name) => {
   // return name.replace("：", "").replace("】", "").replace("【", "");
   return nameReg.exec(name)[1];
 };
+
+const getCategoryIndex = (item) => {
+  const valueArray = swipeGroup[item.enumPictureCategory];
+  return valueArray.findIndex((data) => data === item) + 1;
+};
 </script>
 
 <style lang="less" scoped>
@@ -65,6 +81,12 @@ const getName = (name) => {
 
       .item {
         margin: 0 3px;
+        &.active {
+          padding: 0 3px;
+          border-radius: 6px;
+          background-color: #fff;
+          color: #333;
+        }
       }
     }
   }
