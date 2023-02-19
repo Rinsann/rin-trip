@@ -5,6 +5,7 @@
       class="tabs"
       :titles="names"
       @tab-item-click="tabClick"
+      ref="tabControlRef"
     />
     <van-nav-bar
       title="房屋详情"
@@ -54,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getDetailInfos } from "@/services";
 
@@ -112,6 +113,25 @@ const tabClick = (index) => {
     behavior: "smooth",
   });
 };
+
+// 页面滚动,滚动时匹配对应的tabControl的index
+const tabControlRef = ref();
+watch(scrollTop, (newValue) => {
+  // 1.获取所有的区域的offsetTops
+  const els = Object.values(sectionEls.value);
+  const values = els.map((el) => el.offsetTop);
+
+  // 2.根据newValue匹配想要的索引
+  let index = values.length - 1;
+  for (let i = 0; i < values.length; i++) {
+    if (values[i] > newValue + 50) {
+      index = i - 1;
+      break;
+    }
+  }
+
+  tabControlRef.value?.setCurrentIndex(index);
+});
 </script>
 
 <style lang="less" scoped>
