@@ -8,19 +8,42 @@
       </template>
 
       <template #indicator="props">
-        <div class="indicator">{{ props.active }}/{{ swipeData.length }}</div>
+        <!-- <div class="indicator">{{ props.active }}/{{ swipeData.length }}</div> -->
+        <div class="indicator">
+          <template v-for="(value, key, index) in swipeGroup" :key="key">
+            <span class="item">{{ getName(value[index].title) }}</span>
+          </template>
+        </div>
       </template>
     </van-swipe>
   </div>
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   swipeData: {
     type: Array,
     default: () => [],
   },
 });
+
+// 对数据进行转换
+const swipeGroup = {};
+for (const item of props.swipeData) {
+  let valueArray = swipeGroup[item.enumPictureCategory];
+  if (!valueArray) {
+    valueArray = [];
+    swipeGroup[item.enumPictureCategory] = valueArray;
+  }
+  valueArray.push(item);
+}
+
+// 定义转换数据的方法
+const nameReg = /【(.*?)】/i;
+const getName = (name) => {
+  // return name.replace("：", "").replace("】", "").replace("【", "");
+  return nameReg.exec(name)[1];
+};
 </script>
 
 <style lang="less" scoped>
@@ -34,10 +57,15 @@ defineProps({
       position: absolute;
       right: 5px;
       bottom: 5px;
+      display: flex;
       padding: 2px 5px;
       font-size: 12px;
       color: #fff;
       background: rgba(0, 0, 0, 0.8);
+
+      .item {
+        margin: 0 3px;
+      }
     }
   }
 }
