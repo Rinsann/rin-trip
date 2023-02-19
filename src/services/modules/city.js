@@ -1,7 +1,7 @@
-import hyRequest from "../request";
+import rinRequest from "../request";
 
 export function getCityAll() {
-  return hyRequest.get({
+  return rinRequest.get({
     url: "/city/all",
   });
 }

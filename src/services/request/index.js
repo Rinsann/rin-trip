@@ -3,7 +3,7 @@ import { BASE_URL, TIMEOUT } from "./config";
 import useMainStore from "@/stores/modules/main";
 
 const mainStore = useMainStore();
-class HYRequest {
+class rinRequest {
   constructor(baseURL, timeout = 10000) {
     this.instance = axios.create({
       baseURL,
@@ -53,4 +53,4 @@ class HYRequest {
   }
 }
 
-export default new HYRequest(BASE_URL, TIMEOUT);
+export default new rinRequest(BASE_URL, TIMEOUT);
